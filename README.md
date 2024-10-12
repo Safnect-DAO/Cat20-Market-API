@@ -323,4 +323,165 @@ code  状态码，0：挂单成功，!0：失败
     }
   }
   ```
+### 8、获取单个订单信息
 
+  根据订单ID获取订单信息。
+  
+  `const res = await Cat20MarketAPI.getOrderById(orderId);`
+
+  参数：
+
+    orderId 订单ID （Make Order和订单查询接口中均有返回该字段）
+
+  响应：
+
+  ```
+  {
+      "code": 0,
+      "data": {
+          "cversion": 1,
+          "openHeight": 92278,
+          "orderId": "144668f91b3a2b022eb3c4485f4cf3e753400aea5b0edace07b8872a7f8c1db5",
+          "orderType": "sell",
+          "outputIndex": 1,
+          "ownerAddress": "bc1pzd3qdryjwcpx5sd5a8msf6xaskq0sedc6ud8tl0ruqdmwd7kqmwsadwdh4",
+          "ownerPubKeyHex": "03fd575ba48def7502daa67478484fb425a8231ac19a7edb448202de23c825513b",
+          "price": 338000.44,  // 单价（FB）
+          "satoshis": 42250055, // 总价（FB）
+          "startClosingTime": 0,
+          "stateAddress": "0c1ddb20f4bcdeb4405c1018ae53f0583d251ba8",
+          "status": "cancel",
+          "time": 1728567941925,
+          "tokenAmount": 125,
+          "tokenId": "45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0",
+          "closeTxId": "20f0a1299f49127ff6b8b6cccee888df475e566d7b91ec2f108d295f80d728dd",
+          "closeTime": 1728571014995,
+          "closeAddress": "bc1pzd3qdryjwcpx5sd5a8msf6xaskq0sedc6ud8tl0ruqdmwd7kqmwsadwdh4"
+      }
+  }
+  ```
+
+### 9、获取确认的操作信息
+
+  根据钱包地址、代币ID、操作类型获取确认的（链上）操作信息列表。挂单、吃单、撤单都是操作记录信息，这些操作在链上确认后可以通过该函数获取到记录信息。
+
+  `const res = await Cat20MarketAPI.getConfirmedOps(address, tokenId, opType, offset = 0, limit = 20);`
+
+  参数：
+
+    address 钱包地址（FB链） [optional]
+  
+    tokenId Cat-20协议的代币ID [optional]
+
+    opType 操作类型，取值：make_buy | make_sell | take_buy | take_sell  [optional]
+
+    offset 起始的记录数序号，默认值0
+
+    limit 取多少条记录，默认值20
+
+  响应：
+
+  ```
+    {
+      "code": 0,
+      "data": {
+          "total": 50,
+          "items": [
+              {
+                  "address": "bc1p7qsamzcjffpvg8ej9dqkf7gp2ygs0xdth3tn4f2a3xvl0jg43f7q25kx3a",
+                  "dexOpType": 2,
+                  "height": 96837,
+                  "orderId": "ef624776faf6b934fb43b67795327bc03acedc68c1baeaabe0fbc1ccc65fd60c",
+                  "orderStatus": 1,
+                  "satoshis": 1000000,
+                  "time": 1728704494862,
+                  "tokenAmount": 100,
+                  "tokenId": "45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0",
+                  "txId": "0be80c980abfa2bde55c01408cec4059ba256d474114418321a08a4f86c45bbb",
+                  "opTypeStr": "take_buy" // opType值
+              },
+              {
+                  "address": "bc1phhlyaqpxah86cey3yg8ekfkr2svqvu5re4t04h8fgvyvqx07yjkqvvnpql",
+                  "dexOpType": 0,
+                  "height": 96831,
+                  "orderId": "3a6a1183977b8025a7030cda25a328040d4578b59d8e5d9cec171124d6c6209d",
+                  "orderStatus": 0,
+                  "satoshis": 1000000,
+                  "time": 1728704140704,
+                  "tokenAmount": 100,
+                  "tokenId": "45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0",
+                  "txId": "3a6a1183977b8025a7030cda25a328040d4578b59d8e5d9cec171124d6c6209d",
+                  "opTypeStr": "make_buy"
+              },
+              {
+                  "address": "bc1phhlyaqpxah86cey3yg8ekfkr2svqvu5re4t04h8fgvyvqx07yjkqvvnpql",
+                  "dexOpType": 1,
+                  "height": 96816,
+                  "orderId": "e04cb26069b8e98268359db88db1372b94cb371b3fc10c1a8614ffefb3964608",
+                  "orderStatus": 0,
+                  "satoshis": 1000000,
+                  "time": 1728703771592,
+                  "tokenAmount": 100,
+                  "tokenId": "45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0",
+                  "txId": "e04cb26069b8e98268359db88db1372b94cb371b3fc10c1a8614ffefb3964608",
+                  "opTypeStr": "make_sell"
+              }
+          ]
+      }
+    }
+  ```
+
+### 10、获取未确认的操作信息
+
+  根据钱包地址、代币ID、操作类型获取还未确认的（链上）操作信息列表。（常见的有Gas费率过低的情况，会长时间在未确认的操作信息中）
+
+  `const res = await Cat20MarketAPI.getUnconfirmedOps(address, tokenId, opType, offset = 0, limit = 20);`
+
+  参数：
+
+    address 钱包地址（FB链） [optional]
+  
+    tokenId Cat-20协议的代币ID [optional]
+
+    opType 操作类型，取值：make_buy | make_sell | take_buy | take_sell  [optional]
+
+    offset 起始的记录数序号，默认值0
+
+    limit 取多少条记录，默认值20
+
+  响应：
+
+  ```
+    {
+      "code": 0,
+      "data": {
+          "total": 50,
+          "items": [
+              {
+                  "address": "bc1p7qsamzcjffpvg8ej9dqkf7gp2ygs0xdth3tn4f2a3xvl0jg43f7q25kx3a",
+                  "dexOpType": 2,
+                  "orderId": "ef624776faf6b934fb43b67795327bc03acedc68c1baeaabe0fbc1ccc65fd60c",
+                  "orderStatus": 1,
+                  "satoshis": 1000000,
+                  "time": 1728704494862,
+                  "tokenAmount": 100,
+                  "tokenId": "45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0",
+                  "txId": "0be80c980abfa2bde55c01408cec4059ba256d474114418321a08a4f86c45bbb",
+                  "opTypeStr": "take_buy" // opType值
+              },
+              {
+                  "address": "bc1phhlyaqpxah86cey3yg8ekfkr2svqvu5re4t04h8fgvyvqx07yjkqvvnpql",
+                  "dexOpType": 0,
+                  "orderId": "3a6a1183977b8025a7030cda25a328040d4578b59d8e5d9cec171124d6c6209d",
+                  "orderStatus": 0,
+                  "satoshis": 1000000,
+                  "time": 1728704140704,
+                  "tokenAmount": 100,
+                  "tokenId": "45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0",
+                  "txId": "3a6a1183977b8025a7030cda25a328040d4578b59d8e5d9cec171124d6c6209d",
+                  "opTypeStr": "make_buy"
+              }
+          ]
+      }
+    }
+  ```
