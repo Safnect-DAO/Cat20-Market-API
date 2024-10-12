@@ -1,6 +1,6 @@
 # Cat20-Market-API
 
-Cat20-Market-API 用于构建Market模块的工具包，提供了多条件（根据地址、TokenId、订单类型）查询多类型（Open、Cancel、Deal）的Order、Make Order、Take Order、Cancel Order、和交易数据统计功能。
+Cat20-Market-API 用于构建Market模块的工具包，提供了多条件（根据地址、TokenId、订单类型）查询多类型（Open、Cancel、Deal）的Order、挂单、吃单、撤单、和交易数据统计功能。
 
 在使用本SDK时，需要引入fbsdk.min_0.0.4.js、safnect.min.js、cat20.min_0.2.0.js三个依赖库。
 
@@ -485,3 +485,97 @@ code  状态码，0：挂单成功，!0：失败
       }
     }
   ```
+### 11、获取代币统计信息
+
+  获取指定的代币ID的统计信息
+  
+  `const res = await Cat20MarketAPI.getStats(tokenId);`
+  
+  参数：
+  
+    tokenId 代币ID
+  
+  响应：
+  
+  ```
+    {
+        "code": 0,
+        "data": {
+            "_id": "45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0",
+            "tradeVolume": 112460110, // 成交量
+            "tradeVolumeToken": 755 // 成交地址数
+        }
+    }
+  ```
+
+### 12、获取市场统计信息
+
+  根据成交量|30天成交量|7天成交量|24小时成交量|6小时成交量排序获取整个交易市场统计信息。
+  
+  `const res = await Cat20MarketAPI.getMarketStats(sortField, offset = 0, limit = 20);`
+
+  参数：
+
+    sortField 排序类型，取值：'volume', 'volume30d', 'volume7d', 'volume24h', 'volume6h'
+
+    offset 起始的记录数序号，默认值0
+
+    limit 取多少条记录，默认值20
+
+  响应：
+
+  ```
+  {
+      "code": 0,
+      "data": {
+          "stats": [
+              {
+                  "tokenId": "45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0", // 代币ID
+                  "volume": "110460110", // 成交量
+                  "volume30d": "110460110", // 30天成交量
+                  "volume24h": "0", // 24小时量
+                  "volume7d": "110360110", // 7天量
+                  "volume6h": "0", // 6小时量
+                  "price": 340645.6048387097, // 成交价
+                  "price6h": 340645.6048387097, // 6小时成交价
+                  "price24h": 340645.6048387097, // 24小时成交价
+                  "price7d": 1000, // 7天成交价
+                  "price30d": 1000, // 30天成交价
+                  "name": "cat", // 代币名称
+                  "symbol": "CAT", // 符号
+                  "decimals": 2, // 最小精度小数位
+                  "max": 21000000, // 最大供应
+                  "volumeToken": "555", 
+                  "volumeToken30d": "555",
+                  "volumeToken24h": "0",
+                  "volumeToken7d": "455",
+                  "volumeToken6h": "0"
+              },
+              {
+                  "tokenId": "59d566844f434e419bf5b21b5c601745fcaaa24482b8d68f32b2582c61a95af2_0",
+                  "volume": "1000000",
+                  "volume30d": "1000000",
+                  "volume24h": "0",
+                  "volume7d": "1000000",
+                  "volume6h": "0",
+                  "price": 200000,
+                  "price6h": 200000,
+                  "price24h": 200000,
+                  "price7d": 200000,
+                  "price30d": 200000,
+                  "name": "cat20_pizza",
+                  "symbol": "CAT20_PIZZA",
+                  "decimals": 2,
+                  "max": 21000000,
+                  "volumeToken": "5",
+                  "volumeToken30d": "5",
+                  "volumeToken24h": "0",
+                  "volumeToken7d": "5",
+                  "volumeToken6h": "0"
+              }
+          ],
+          "total": 2
+      }
+  }
+  ```
+    
