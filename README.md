@@ -578,4 +578,111 @@ code  状态码，0：挂单成功，!0：失败
       }
   }
   ```
-    
+
+### 13、获取代币列表
+
+  获取Cat-20协议的代币列表，以代币交易数量（代币活跃度）排序，支持分页查询。
+
+  `const res = await Cat20MarketAPI.getTokenList(offset = 0, limit = 20);`;
+
+  参数：
+
+    offset 起始的记录数序号，缺省值0
+
+    limit 取多少条记录，缺省值20
+
+  响应：
+
+  ```
+  {
+    "code": 0,
+    "msg": "ok",
+    "data": {
+        "detail": [
+            {
+                "token_id": "45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0", // 代币ID
+                "name": "cat",  // 名称
+                "symbol": "CAT", // 符号
+                "max": "21000000",  // 最大供应量
+                "premine": "0", // 预铸量（发行者保留代币数量）
+                "lim": "5", // 一次铸造数量限制
+                "created_at": "2024-09-11T09:09:22.106Z", // 创建时间 
+                "token_pubkey": "fdc45725edcc1023ae2a36f5e67485ba1bb1cdc290b92421f629cf1c24c64585",
+                "holders": 31494, // 持有钱包地址数
+                "mint": 21000000, 
+                "txs": 4676457  // 交易数
+            },
+            {
+                "token_id": "59d566844f434e419bf5b21b5c601745fcaaa24482b8d68f32b2582c61a95af2_0",
+                "name": "cat20_pizza",
+                "symbol": "CAT20_PIZZA",
+                "max": "21000000",
+                "premine": "0",
+                "lim": "10",
+                "created_at": "2024-09-12T03:54:57.164Z",
+                "token_pubkey": "cc2ca3e8ee62460a864e71b9b90d0a33dadef391640a5d3016117e1db18b7ec4",
+                "holders": 21925,
+                "mint": 2.014011093E7,
+                "txs": 2038863
+            },
+            {
+                "token_id": "028ae179783cd237f475ca1a58d5c8b3ecec3884862d337971fc168d5e92c16e_0",
+                "name": "FLUR",
+                "symbol": "FLUR",
+                "max": "21000000",
+                "premine": "0",
+                "lim": "10",
+                "created_at": "2024-09-20T20:17:22.469Z",
+                "token_pubkey": "86b3d74d6cb78e77cc749d2cc626587778272f26b582c195fc61077376e5337e",
+                "holders": 9068,
+                "mint": 16773590,
+                "txs": 1677359
+            }
+        ],
+        "nodeBlockHeight": 108021,
+        "trackerBlockHeight": 108021,
+        "total": 3180
+    }
+}
+```
+
+### 14、查询代币详细信息
+
+  根据代币ID查询代币详细信息。
+
+  `const res = await Cat20MarketAPI.getTokenInfo(tokenId);`
+
+  参数：
+
+    tokenId 代币ID
+
+  响应：
+
+  ```
+  {
+      "code": 0,
+      "msg": "OK",
+      "data": {
+          "minterAddr": "bc1pqw9ncs4sna0ndh85ux5dhh9swueyjql23t4em8j0smywkqsngfmsn7gmua",
+          "tokenAddr": "bc1plhz9wf0desgz8t32xm67vay9hgdmrnwzjzujgg0k9883cfxxgkzs20qfd5",
+          "info": {
+              "max": "21000000",
+              "name": "cat",
+              "limit": "5",
+              "symbol": "CAT", // 符号
+              "premine": "0", // 预铸数量
+              "decimals": 2, // 精度
+              "minterMd5": "21cbd2e538f2b6cc40ee180e174f1e25"
+          },
+          "tokenId": "45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0",
+          "revealTxid": "9a3fcb5a8344f53f2ba580f7d488469346bff9efe7780fbbf8d3490e3a3a0cd7",
+          "revealHeight": 6540,
+          "genesisTxid": "45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b",
+          "name": "cat",
+          "symbol": "CAT",
+          "decimals": 2,
+          "minterPubKey": "038b3c42b09f5f36dcf4e1a8dbdcb077324903ea8aeb9d9e4f86c8eb02134277",
+          "tokenPubKey": "fdc45725edcc1023ae2a36f5e67485ba1bb1cdc290b92421f629cf1c24c64585"
+      }
+  }
+  ```
