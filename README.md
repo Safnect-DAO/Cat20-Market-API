@@ -581,7 +581,7 @@ code  状态码，0：挂单成功，!0：失败
 
 ### 13、获取代币列表
 
-  获取Cat-20协议的代币列表，以代币交易数量（代币活跃度）排序，支持分页查询。
+  获取Cat-20协议的代币列表，以代币交易数量（代币活跃度）排序，支持分页查询。(建议缓存在本地）
 
   `const res = await Cat20MarketAPI.getTokenList(offset = 0, limit = 20);`;
 
@@ -648,7 +648,7 @@ code  状态码，0：挂单成功，!0：失败
 
 ### 14、查询代币详细信息
 
-  根据代币ID查询代币详细信息。
+  根据代币ID查询代币详细信息。(建议缓存在本地）
 
   `const res = await Cat20MarketAPI.getTokenInfo(tokenId);`
 
